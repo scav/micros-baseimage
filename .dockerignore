@@ -1,0 +1,9 @@
+docs
+target
+src*
+vagrant
+resources*
+*.iml
+chef
+.idea
+.git
