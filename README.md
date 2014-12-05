@@ -69,13 +69,11 @@ start
 ### Example docker.properties:
 ```
 service_name=my-docker-service
-repo=releases
-#repo=snapshots
 
 #The version reference will be added by docker during build (from pom.xml)
 #while referencing with ${service_name} works - the service name can be hardcoded here.
-repo_path=http://user:pass@repo.example.com/${repo}/com/example/${service_name}/${version}/${service_name}-${version}.jar
-
+repo_path=http://user:pass@repo.example.com/releases/com/example/${service_name}/${version}/${service_name}-${version}.jar
+snapshot_repo_path=http://user:pass@repo.example.com/snapshots/com/example/${service_name}/${version}/${service_name}-${version}.jar
 ```
 
 ## pom.xml
