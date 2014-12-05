@@ -17,9 +17,13 @@ This image is built on [phusion/baseimage-docker](https://github.com/phusion/bas
 documentation on how the low-level stuff works.
 
 ## docker.properties
-The two variables needed here is ```service_name``` and ```repo_path```. The repo-path will point to a http(s) location
-and download the jar-file with ```curl```. The variable ```service_version``` will also be available when the ```curl```
+The two/three variables needed here is ```service_name``` and ```repo_path```. 
+The repo-path will point to a http(s) location
+and download the jar-file with ```curl```. 
+The variable ```service_version``` will also be available when the ```curl```
 command executes, so you can build a maven repo-path.
+If your version ends with a -SNAPSHOT the variable ```snapshot_repo_path``` will be used place of ```repo_path```.
+
 
 NOTE: you can't use theese variables in your own build - as the are only set during one ```RUN``` instruction
 
