@@ -31,32 +31,39 @@ NOTE: you can't use theese variables in your own build - as the are only set dur
 See the [variables](https://github.com/phusion/baseimage-docker#environment_variables) documentation from
 [phusion/baseimage-docker](https://github.com/phusion/baseimage-docker) to see how it works.
 
-This Dockerfile exposes:
-* ```SERVICE_NAME```
+This Dockerfile exposes these variables to the running image:
 
-  The service name is fetched from the docker.properties file and made into a system variable
+######```SERVICE_NAME```
 
-* ```SERVICE_VERSION```
+The service name is fetched from the docker.properties file and made into a system variable
 
-  The service version is made available from the pom.xml
 
-* ```SERVICE_COMMAND```
+######```SERVICE_VERSION```
 
-  This is default set to ```server config.yml```, but can be overridden so that it can e.g migrate instead of server
-  start
+The service version is made available from the pom.xml
 
-* ```JAVA_OPTIONS```
 
-  This is set to a long list of default values, fetched and adapted form a
-  [post](https://groups.google.com/d/msg/dropwizard-user/PPgqS2ZHeFg/OoSq0yWMBwAJ) in the dropwizard discussion groups.
+######```SERVICE_COMMAND```
 
-* ```JAVA_MEMORY```
+This is default set to ```server config.yml```, but can be overridden so that it can e.g migrate instead of server
+start
 
-  This is a convenience variable, as you don't need to reiterate all ```JAVA_OPTIONS``` just to change the memory settings.
 
-* ```JAVA_LOGGC```
+######```JAVA_OPTIONS```
 
-  This variable is set at image build-time since it relies on the log-folder location.
+ This is set to a long list of default values, fetched and adapted form a
+[post](https://groups.google.com/d/msg/dropwizard-user/PPgqS2ZHeFg/OoSq0yWMBwAJ) in the dropwizard discussion groups.
+
+
+######```JAVA_MEMORY```
+
+ This is a convenience variable, as you don't need to reiterate all ```JAVA_OPTIONS``` just to change the memory settings.
+
+
+######```JAVA_LOGGC```
+
+ This variable is set at image build-time since it relies on the log-folder location.
+
 
 
 ### Example docker.properties:
