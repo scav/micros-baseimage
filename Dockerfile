@@ -58,7 +58,7 @@ ONBUILD RUN  source /tmp/docker.properties \
       && echo " -Xloggc:/var/log/$service_name/gc.log " >> /etc/container_environment/JAVA_LOGGC \
       && mv /tmp/docker-config.yml /opt/$service_name/config.yml \
       && echo "docker.properties: $(cat /tmp/build_docker.properties)" \
-      && if [ $service_version -eq *-SNAPSHOT ] ; then export chosen_repo=$snapshot_repo_path ; else export chosen_repo=$repo_path ; fi \
+      && if [[ "$service_version" = *"-SNAPSHOT" ]] ; then export chosen_repo=$snapshot_repo_path ; else export chosen_repo=$repo_path ; fi \
       && curl -f -v -o /opt/${service_name}/${service_name}-${service_version}.jar ${chosen_repo} \
       && chmod -R a+x /etc/service/${service_name}/ \
       && chown -R $service_name:$service_name /etc/service/$service_name \
