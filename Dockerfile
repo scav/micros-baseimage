@@ -117,6 +117,10 @@ ENV JAVA_OPTIONS -server \
 -Dcom.sun.management.jmxremote.ssl=false \
 -XX:-ReduceInitialCardMarks
 
+# for arbritrary settings and configurations 
+# e.g. -Ddw.cassandra.cassandraContactPoints[0]=10.0.0.123
+# as . is not allowed in bash variables
+#ENV JAVA_RUNTIME_OPTIONS
 
 # alternative:
 # ENV SERVICE_OPTIONS migrate /etc/YOUR_SERVICE_NAME/config.yml
