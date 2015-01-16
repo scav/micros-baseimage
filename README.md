@@ -33,47 +33,49 @@ See the [variables](https://github.com/phusion/baseimage-docker#environment_vari
 
 This Dockerfile exposes these variables to the running image:
 
-######```SERVICE_NAME```
+###```SERVICE_NAME```
 
 The service name is fetched from the docker.properties file and made into a system variable
 
 
-######```SERVICE_VERSION```
+###```SERVICE_VERSION```
 
 The service version is made available from the pom.xml
 
 
-######```SERVICE_COMMAND```
+###```SERVICE_COMMAND```
 
 This is default set to ```server config.yml```, but can be overridden so that it can e.g migrate instead of server
 start
 
 
-######```JAVA_OPTIONS```
+###```JAVA_OPTIONS```
 
- This is set to a long list of default values, fetched and adapted form a
+This is set to a long list of default values, fetched and adapted form a
 [post](https://groups.google.com/d/msg/dropwizard-user/PPgqS2ZHeFg/OoSq0yWMBwAJ) in the dropwizard discussion groups.
 
 
-######```JAVA_MEMORY```
+###```JAVA_MEMORY```
 
- This is a convenience variable, as you don't need to reiterate all ```JAVA_OPTIONS``` just to change the memory settings.
+This is a convenience variable, as you don't need to reiterate all ```JAVA_OPTIONS``` just to change the memory settings.
 
 
-######```JAVA_LOGGC```
+###```JAVA_LOGGC```
 
- This variable is set at image build-time since it relies on the log-folder location.
+This variable is set at image build-time since it relies on the log-folder location.
 
 
 
 ### Example docker.properties:
 ```
 service_name=my-docker-service
+repo=releases
+#repo=snapshots
 
 #The version reference will be added by docker during build (from pom.xml)
 #while referencing with ${service_name} works - the service name can be hardcoded here.
-repo_path=http://user:pass@repo.example.com/releases/com/example/${service_name}/${version}/${service_name}-${version}.jar
-snapshot_repo_path=http://user:pass@repo.example.com/snapshots/com/example/${service_name}/${version}/${service_name}-${version}.jar
+repo_path=http://user:pass@repo.example.com/${repo}/com/example/${service_name}/${version}/${service_name}-${version}.jar
+
 ```
 
 ## pom.xml
