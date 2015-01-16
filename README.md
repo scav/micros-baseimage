@@ -35,7 +35,7 @@ This Dockerfile exposes these variables to the running image:
 
 ###```SERVICE_NAME```
 
-The service name is fetched from the docker.properties file and made into a system variable
+The service name is fetched from the docker.properties file and made into a system variable. Note that the running service is always called ```docker-service```. So if you enter the container it is always simple to stop it with ```sv stop docker-service```.
 
 
 ###```SERVICE_VERSION```
@@ -43,10 +43,15 @@ The service name is fetched from the docker.properties file and made into a syst
 The service version is made available from the pom.xml
 
 
-###```SERVICE_COMMAND```
 
-This is default set to ```server config.yml```, but can be overridden so that it can e.g migrate instead of server
-start
+###```SERVICE_CONFIG```
+Simply points to the /opt/$SERVICE_NAME/config.yml
+
+###```SERVICE_CMD```
+
+This is default set to ```server```, but can be overridden so that it can e.g ```migrate``` instead of ```server```. If the command is set to anything else than ```server``` the service will run once during startup of container with this command. After successful return the ```SERVICE_CMD``` is rewritten to ```server``` and server starts normally.
+
+
 
 
 ###```JAVA_OPTIONS```
