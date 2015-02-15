@@ -39,7 +39,7 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 #Swaps (ubuntu) dash with bash for easier sourcein
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
-COPY docker-service.sh /etc/service/docker-service/run 
+COPY docker-service.sh /tmp/docker-service.sh
 COPY docker-service-startup-command.sh /etc/my_init.d/docker-service-startup-command.sh
 RUN chmod a+x /etc/my_init.d/docker-service-startup-command.sh
 ONBUILD COPY docker-config.yml docker.properties pom.xml /tmp/
@@ -56,6 +56,8 @@ ONBUILD RUN  source /tmp/docker.properties \
       && source /etc/my-service-variables.properties \
       && useradd -ms /bin/bash -d /opt/$service_name -G docker_env $service_name \
       && mkdir /var/log/${service_name} \
+      && mkdir /etc/service/${service_name} \
+      && mv /tmp/docker-service.sh /etc/service/$service_name/run  \
       && echo $service_name >> /etc/container_environment/SERVICE_NAME \
       && echo $service_version >> /etc/container_environment/SERVICE_VERSION \
       && echo "server" >> /etc/container_environment/SERVICE_CMD \
@@ -65,8 +67,8 @@ ONBUILD RUN  source /tmp/docker.properties \
       && echo "docker.properties: $(cat /tmp/build_docker.properties)" \
       && if [[ "$service_version" = *"-SNAPSHOT" ]] ; then export chosen_repo=$snapshot_repo_path ; else export chosen_repo=$repo_path ; fi \
       && curl -f -v -o /opt/${service_name}/${service_name}-${service_version}.jar ${chosen_repo} \
-      && chmod -R a+x /etc/service/docker-service/ \
-      && chown -R $service_name:$service_name /etc/service/docker-service \
+      && chmod -R a+x /etc/service/${service_name}/ \
+      && chown -R $service_name:$service_name /etc/service/$service_name \
       && chown -R $service_name:$service_name /var/log/$service_name \
       && chown -R $service_name:$service_name /opt/$service_name  \
       && ls -al  /opt/${service_name}    \
