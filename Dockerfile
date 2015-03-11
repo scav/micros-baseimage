@@ -73,7 +73,7 @@ ONBUILD RUN  source /tmp/docker.properties \
       && chown -R $service_name:$service_name /opt/$service_name  \
       && ls -al  /opt/${service_name}    \
       && ls -al  /var/log/${service_name} \
-      && cat /etc/service/docker-service/run    \
+      && cat /etc/service/${service_name}/run    \
       && rm -rf /tmp/
 
 
