@@ -35,7 +35,7 @@ This Dockerfile exposes these variables to the running image:
 
 ###```SERVICE_NAME```
 
-The service name is fetched from the docker.properties file and made into a system variable. This is also the name of the process starting the microservice process
+The service name is fetched from the docker.properties file and made into a system variable. This is also the name of the process starting the microservice process.
 
 
 ###```SERVICE_VERSION```

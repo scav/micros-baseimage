@@ -119,10 +119,15 @@ ENV JAVA_OPTIONS -server \
 -Djava.security.egd=file:/dev/urandom \
 -Dcom.sun.management.jmxremote \
 -Dcom.sun.management.jmxremote.port=9010 \
+-Dcom.sun.management.jmxremote.rmi.port=9010
 -Dcom.sun.management.jmxremote.local.only=false \
 -Dcom.sun.management.jmxremote.authenticate=false \
 -Dcom.sun.management.jmxremote.ssl=false \
 -XX:-ReduceInitialCardMarks
+
+#TODO: Check that jmx works through docker.
+#http://ptmccarthy.github.io/2014/07/24/remote-jmx-with-docker/
+#-Dcom.sun.management.jmxremote.rmi.port=9010
 
 # for arbritrary settings and configurations 
 # e.g. -Ddw.cassandra.cassandraContactPoints[0]=10.0.0.123
