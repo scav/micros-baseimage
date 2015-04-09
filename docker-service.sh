@@ -1,7 +1,8 @@
 #!/bin/sh
 #Since /var/log is a mount we have to create the dir:
 mkdir -p /var/log/$SERVICE_NAME
-chown $SERVICE_NAME:$SERVICE_NAME /var/log/$SERVICE_NAME
+chown -R $SERVICE_NAME:$SERVICE_NAME /var/log/$SERVICE_NAME
+#Use the newest jar file in the directory:
+service_jar=$(ls -1t /opt/${SERVICE_NAME}/*.jar|head -1)
 exec /sbin/setuser $SERVICE_NAME java $JAVA_OPTIONS $JAVA_MEMORY $JAVA_LOGGC $JAVA_RUNTIME_OPTIONS \
--jar /opt/${SERVICE_NAME}/${SERVICE_NAME}-${SERVICE_VERSION}.jar \
-  $SERVICE_CMD $SERVICE_CONFIG >>  /var/log/${SERVICE_NAME}/sysout.log  2>&1
+-jar ${service_jar} $SERVICE_CMD $SERVICE_CONFIG  2>&1 |tee /var/log/${SERVICE_NAME}/sysout.log 
