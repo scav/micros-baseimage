@@ -43,7 +43,7 @@ COPY docker-service.sh /tmp/docker-service.sh
 COPY docker-service-startup-command.sh /etc/my_init.d/docker-service-startup-command.sh
 RUN chmod a+x /etc/my_init.d/docker-service-startup-command.sh
 ONBUILD COPY docker/docker-config.yml docker/docker.properties build/libs/*.jar target/*.jar /tmp/
-RUN rm /tmp/*tests*.jar
+RUN rm -f /tmp/*tests*.jar
 
 
 #Notes on variables below. $UPPER_CASE means variables to be evaluated at runtime, all file names in
