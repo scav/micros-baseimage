@@ -1,5 +1,5 @@
 # vim:set ft=dockerfile:
-FROM vimond.artifactoryonline.com/vimond-base
+FROM vimond.artifactoryonline.com/vimond-java8
 MAINTAINER Olve Sæther Hansen <olve@vimond.com>
 
 # Set correct environment variables.
@@ -14,21 +14,12 @@ RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
 CMD ["/sbin/my_init"]
 
 
-# automatically accept oracle license
-RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true \
-    | /usr/bin/debconf-set-selections
 
-
-RUN add-apt-repository ppa:webupd8team/java \
-   && apt-get update \
+RUN apt-get update \
    && apt-get -y upgrade \
    && apt-get -y install \
        python-software-properties \
        python-pip \
-       oracle-java8-installer \
-       oracle-java8-set-default \
-       oracle-java8-unlimited-jce-policy \
-       libsnappy-java \
        libxml2-utils \
    && apt-get clean   \
    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
