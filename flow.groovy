@@ -6,7 +6,5 @@ node('docker-image-builder'){
 
   docker.buildTagPush('micros-baseimage')
     
-  }
-
-  stage 'inital'
+}
 

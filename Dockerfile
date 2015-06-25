@@ -1,5 +1,5 @@
 # vim:set ft=dockerfile:
-FROM vimond.artifactoryonline.com/vimond-java8
+FROM vimond.artifactoryonline.com/vimond-base-java-8
 MAINTAINER Olve Sæther Hansen <olve@vimond.com>
 
 # Set correct environment variables.
@@ -18,16 +18,14 @@ CMD ["/sbin/my_init"]
 RUN apt-get update \
    && apt-get -y upgrade \
    && apt-get -y install \
-       python-software-properties \
        python-pip \
-       libxml2-utils \
    && apt-get clean   \
    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN pip install cqlsh
 
-ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
-#Swaps (ubuntu) dash with bash for easier sourceing
+
+#Swaps (ubuntu) dash with bash for easier sourcing
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 COPY docker-service.sh /tmp/docker-service.sh
@@ -42,10 +40,6 @@ ONBUILD RUN rm -fv /tmp/*tests*.jar
 #Variables with $lower_case means the var should used only in the Dockerfile image build phase.
 #This is for keeping the confusion at bay.
 ONBUILD RUN  source /tmp/docker.properties \
-#      && xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" /tmp/pom.xml > /tmp/version.txt \
-#      && echo "service_version=$(cat /tmp/version.txt)" >> /etc/my-service-variables.properties \
-#      && cat /tmp/docker.properties >> /etc/my-service-variables.properties \
-#      && source /etc/my-service-variables.properties \
       && useradd -ms /bin/bash -d /opt/$service_name -G docker_env $service_name \
       && mkdir /var/log/${service_name} \
       && mkdir /etc/service/${service_name} \
@@ -64,7 +58,7 @@ ONBUILD RUN  source /tmp/docker.properties \
       && ls -al  /opt/${service_name}    \
       && ls -al  /var/log/${service_name} \
       && cat /etc/service/${service_name}/run    \
-      && rm -rf /tmp/
+      && rm -rf /tmp/*
 
 
                                                            
@@ -125,10 +119,11 @@ ENV JAVA_OPTIONS -server \
 #ENV JAVA_RUNTIME_OPTIONS
 
 # alternative:
-# ENV SERVICE_OPTIONS migrate /opt/YOUR_SERVICE_NAME/config.yml
+# ENV SERVICE_OPTIONS migrate 
 
-#To use this the SERVICE_OPTIONS variable must reflect the path to the configuration file here
+#To use this the SERVICE_CONFIGURATION variable must reflect the path to the configuration file here
 VOLUME /etc/alternative-config
+# ENV SERVICE_CONFIGURATION /etc/alternative-config
 
 #Otherwise you might overwrite the config-file with the explicit path to
 #the existing configuration file - /opt/$SERVICE_NAME/config.yml
