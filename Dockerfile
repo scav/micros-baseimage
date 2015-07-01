@@ -1,28 +1,6 @@
 # vim:set ft=dockerfile:
-FROM vimond.artifactoryonline.com/vimond-base-java-8
+FROM vimond-docker-dockerv2-local.artifactoryonline.com/vimond-base-java-8
 MAINTAINER Olve Sæther Hansen <olve@vimond.com>
-
-# Set correct environment variables.
-ENV HOME /root
-
-# Regenerate SSH host keys. baseimage-docker does not contain any, so you
-# have to do that yourself. You may also comment out this instruction; the
-# init system will auto-generate one during boot.
-RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
-
-# Use baseimage-docker's init system.
-CMD ["/sbin/my_init"]
-
-
-
-RUN apt-get update \
-   && apt-get -y upgrade \
-   && apt-get -y install \
-       python-pip \
-   && apt-get clean   \
-   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-RUN pip install cqlsh
-
 
 
 #Swaps (ubuntu) dash with bash for easier sourcing
@@ -31,6 +9,7 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 COPY docker-service.sh /tmp/docker-service.sh
 COPY docker-service-startup-command.sh /etc/my_init.d/docker-service-startup-command.sh
 RUN chmod a+x /etc/my_init.d/docker-service-startup-command.sh
+
 ONBUILD COPY docker/docker-config.yml docker/docker.properties build/libs/*.jar target/*.jar /tmp/
 ONBUILD RUN rm -fv /tmp/*tests*.jar
 
