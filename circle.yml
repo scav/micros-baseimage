@@ -2,7 +2,7 @@ machine:
   services:
     - docker
   environment:
-    - IMAGE_NAME: micros-baseimage
+    IMAGE_NAME: micros-baseimage
 
 dependencies:
   cache_directories:
