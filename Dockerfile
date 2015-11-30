@@ -2,45 +2,22 @@
 FROM vimond-docker-dockerv2-local.artifactoryonline.com/vimond-base-java-8
 MAINTAINER Olve Sæther Hansen <olve@vimond.com>
 
-
-#Swaps (ubuntu) dash with bash for easier sourcing
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+# Promotheus JMX exporter java agent
+ADD https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.5/jmx_prometheus_javaagent-0.5.jar /tmp/jmx_prometheus_javaagent-0.5.jar
+COPY prometheus.yml /tmp/prometheus.yml
 
 COPY docker-service.sh /tmp/docker-service.sh
 COPY docker-service-startup-command.sh /etc/my_init.d/docker-service-startup-command.sh
 RUN chmod a+x /etc/my_init.d/docker-service-startup-command.sh
+COPY build.sh /tmp/build.sh
+RUN chmod a+x /tmp/build.sh
 
 ONBUILD COPY docker/docker-config.yml docker/docker.properties build/libs/*.jar target/*.jar /tmp/
 ONBUILD RUN rm -fv /tmp/*tests*.jar
 
 
-#Notes on variables below. $UPPER_CASE means variables to be evaluated at runtime, all file names in
-#/etc/container_environment will be a variable name with the file content as value.
-#Variables with $lower_case means the var should used only in the Dockerfile image build phase.
-#This is for keeping the confusion at bay.
-ONBUILD RUN  source /tmp/docker.properties \
-      && useradd -ms /bin/bash -d /opt/$service_name -G docker_env $service_name \
-      && mkdir /var/log/${service_name} \
-      && mkdir /etc/service/${service_name} \
-      && mv /tmp/docker-service.sh /etc/service/$service_name/run  \
-      && echo $service_name >> /etc/container_environment/SERVICE_NAME \
-      && echo "server" >> /etc/container_environment/SERVICE_CMD \
-      && echo "/opt/$service_name/config.yml" >> /etc/container_environment/SERVICE_CONFIG \
-      && echo " -Xloggc:/var/log/$service_name/gc.log " >> /etc/container_environment/JAVA_LOGGC \
-      && mv /tmp/docker-config.yml /opt/$service_name/config.yml \
-      && mv /tmp/*.jar /opt/$service_name \
-      && echo "docker.properties: $(cat /tmp/docker.properties)" \
-      && chmod -R a+x /etc/service/${service_name}/ \
-      && chown -R $service_name:$service_name /etc/service/$service_name \
-      && chown -R $service_name:$service_name /var/log/$service_name \
-      && chown -R $service_name:$service_name /opt/$service_name  \
-      && ls -al  /opt/${service_name}    \
-      && ls -al  /var/log/${service_name} \
-      && cat /etc/service/${service_name}/run    \
-      && rm -rf /tmp/*
+ONBUILD RUN /tmp/build.sh
 
-
-                                                           
 #All variables here will also be written to /etc/container_environment/VAR_NAME
 ENV JAVA_MEMORY -Xms500m -Xmx500m
 
@@ -108,5 +85,11 @@ VOLUME /etc/alternative-config
 #the existing configuration file - /opt/$SERVICE_NAME/config.yml
 #VOLUME /opt/$SERVICE_NAME/config.yml
 
+# Overridable in docker.properties
+ENV enable_prometheus true
+
 #JMX:
 EXPOSE 9010
+
+# JMX EXPORTER
+EXPOSE 9012
