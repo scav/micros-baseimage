@@ -20,6 +20,11 @@ else
     rm /tmp/prometheus.yml
 fi
 
+unzip -d /opt/$service_name/ /tmp/newrelic-java.zip
+echo $service_name >> /etc/container_environment/NEW_RELIC_APP_NAME
+echo "STDOUT" >> /etc/container_environment/NEW_RELIC_LOG
+
+
 mv /tmp/docker-service.sh /etc/service/$service_name/run
 echo $service_name >> /etc/container_environment/SERVICE_NAME
 echo "server" >> /etc/container_environment/SERVICE_CMD

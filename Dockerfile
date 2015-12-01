@@ -6,6 +6,8 @@ MAINTAINER Olve Sæther Hansen <olve@vimond.com>
 ADD https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.5/jmx_prometheus_javaagent-0.5.jar /tmp/jmx_prometheus_javaagent-0.5.jar
 COPY prometheus.yml /tmp/prometheus.yml
 
+ADD https://download.newrelic.com/newrelic/java-agent/newrelic-agent/3.22.1/newrelic-java.zip /tmp/newrelic-java.zip
+
 COPY docker-service.sh /tmp/docker-service.sh
 COPY docker-service-startup-command.sh /etc/my_init.d/docker-service-startup-command.sh
 RUN chmod a+x /etc/my_init.d/docker-service-startup-command.sh
@@ -20,6 +22,11 @@ ONBUILD RUN /tmp/build.sh
 
 #All variables here will also be written to /etc/container_environment/VAR_NAME
 ENV JAVA_MEMORY -Xms500m -Xmx500m
+
+
+# Set this to a valid new relic license key to activate the new relic agent
+ENV NEW_RELIC_LICENSE_KEY ""
+
 
 # +UseNUMA                    make sure we use NUMA-specific GCs if possible
 # +UserCompressedOops         use 32-bit pointers to reduce heap usage
