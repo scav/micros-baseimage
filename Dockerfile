@@ -7,6 +7,7 @@ ADD https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.
 COPY prometheus.yml /tmp/prometheus.yml
 
 ADD https://download.newrelic.com/newrelic/java-agent/newrelic-agent/3.22.1/newrelic-java.zip /tmp/newrelic-java.zip
+COPY newrelic.yml /tmp/newrelic.yml
 
 COPY docker-service.sh /tmp/docker-service.sh
 COPY docker-service-startup-command.sh /etc/my_init.d/docker-service-startup-command.sh
