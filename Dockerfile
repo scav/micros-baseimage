@@ -22,7 +22,7 @@ ONBUILD RUN rm -fv /tmp/*tests*.jar
 ONBUILD RUN /tmp/build.sh
 
 #All variables here will also be written to /etc/container_environment/VAR_NAME
-ENV JAVA_MEMORY -Xms500m -Xmx500m
+ENV JAVA_MEMORY -Xmx500m
 
 
 # Set this to a valid new relic license key to activate the new relic agent
