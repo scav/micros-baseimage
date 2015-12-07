@@ -2,10 +2,6 @@
 FROM vimond-docker-dockerv2-local.artifactoryonline.com/vimond-base-java-8
 MAINTAINER Olve Sæther Hansen <olve@vimond.com>
 
-# Promotheus JMX exporter java agent
-ADD https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.5/jmx_prometheus_javaagent-0.5.jar /tmp/jmx_prometheus_javaagent-0.5.jar
-COPY prometheus.yml /tmp/prometheus.yml
-
 ADD https://download.newrelic.com/newrelic/java-agent/newrelic-agent/3.22.1/newrelic-java.zip /tmp/newrelic-java.zip
 COPY newrelic.yml /tmp/newrelic.yml
 
@@ -93,11 +89,5 @@ VOLUME /etc/alternative-config
 #the existing configuration file - /opt/$SERVICE_NAME/config.yml
 #VOLUME /opt/$SERVICE_NAME/config.yml
 
-# Overridable in docker.properties
-ENV enable_prometheus true
-
 #JMX:
 EXPOSE 9010
-
-# JMX EXPORTER
-EXPOSE 9012

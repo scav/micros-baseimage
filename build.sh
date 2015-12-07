@@ -8,18 +8,6 @@ useradd -ms /bin/bash -d /opt/$service_name -G docker_env $service_name
 mkdir /var/log/${service_name}
 mkdir /etc/service/${service_name}
 
-if [ "$enable_prometheus" = "true" ]; then
-    echo jmx-exporter-prometheus >> /etc/container_environment/SERVICE_9012_NAME
-    echo $service_name >> /etc/container_environment/SERVICE_9012_TAGS
-    echo -javaagent:/opt/$service_name/jmx_prometheus_javaagent-0.5.jar=9012:/opt/$service_name/prometheus.yml >> /etc/container_environment/JAVA_PROMETHEUS_AGENT_OPTIONS
-    mv /tmp/jmx_prometheus_javaagent-0.5.jar /opt/$service_name/
-    mv /tmp/prometheus.yml /opt/$service_name/
-else
-    # Make sure these files does not end up anywhere if prometheus is disabled
-    rm /tmp/jmx_prometheus_javaagent-0.5.jar
-    rm /tmp/prometheus.yml
-fi
-
 unzip -d /opt/$service_name/ /tmp/newrelic-java.zip
 cp /tmp/newrelic.yml /opt/$service_name/newrelic/
 echo $service_name >> /etc/container_environment/NEW_RELIC_APP_NAME
