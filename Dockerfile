@@ -91,3 +91,6 @@ VOLUME /etc/alternative-config
 
 #JMX:
 EXPOSE 9010
+
+# Makes all docker dw apps log json if using: ${VIMOND_DW_CONSOLE_LOG_FORMAT:-console} as config-entry
+ENV VIMOND_DW_CONSOLE_LOG_FORMAT console-logstash
