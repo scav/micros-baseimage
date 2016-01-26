@@ -11,4 +11,4 @@ if [ -n "$NEW_RELIC_LICENSE_KEY" ]; then
 fi
 
 exec /sbin/setuser $SERVICE_NAME java $JAVA_OPTIONS $JAVA_NEW_RELIC_OPTIONS $JAVA_PROMETHEUS_AGENT_OPTIONS $JAVA_MEMORY $JAVA_LOGGC $JAVA_RUNTIME_OPTIONS \
--jar ${service_jar} $SERVICE_CMD $SERVICE_CONFIG  2>&1 |tee /var/log/${SERVICE_NAME}/sysout.log; test ${PIPESTATUS[0]} -eq 0
+-jar ${service_jar} $SERVICE_CMD $SERVICE_CONFIG; test ${PIPESTATUS[0]} -eq 0
