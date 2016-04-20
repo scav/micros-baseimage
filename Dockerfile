@@ -83,7 +83,7 @@ ENV JAVA_OPTIONS -server \
 
 #To use this the SERVICE_CONFIGURATION variable must reflect the path to the configuration file here
 VOLUME /etc/alternative-config
-# ENV SERVICE_CONFIGURATION /etc/alternative-config
+# ENV SERVICE_CONFIG /etc/alternative-config
 
 #Otherwise you might overwrite the config-file with the explicit path to
 #the existing configuration file - /opt/$SERVICE_NAME/config.yml
