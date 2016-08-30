@@ -12,6 +12,9 @@ unzip -d /opt/$service_name/ /tmp/newrelic-java.zip
 cp /tmp/newrelic.yml /opt/$service_name/newrelic/
 echo $service_name >> /etc/container_environment/NEW_RELIC_APP_NAME
 echo "STDOUT" >> /etc/container_environment/NEW_RELIC_LOG
+mkdir /opt/$service_name/newrelic/extensions/
+cp /tmp/newrelic-extensions/*.xml /opt/$service_name/newrelic/extensions/
+
 
 mv /tmp/docker-service.sh /etc/service/$service_name/run
 echo $service_name >> /etc/container_environment/SERVICE_NAME
