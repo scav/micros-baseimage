@@ -1,1 +1,1 @@
-This folder contains custom instrumentation rules for newrelic. Can be used to e.g. exclude certain methods from beeing instrumented.
+This folder contains custom instrumentation rules for newrelic. Can be used to e.g. exclude certain methods from beeing instrumented. Make sure the different xml-files have different extension name-tags.
