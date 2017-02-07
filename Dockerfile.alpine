@@ -1,0 +1,64 @@
+FROM openjdk:8-jre-alpine
+
+MAINTAINER Matteo Remo Luzzi <matteo@vimond.com>
+
+RUN apk add --no-cache bash
+
+#Install new relic agent
+ADD https://download.newrelic.com/newrelic/java-agent/newrelic-agent/3.22.1/newrelic-java.zip /tmp/newrelic-java.zip
+COPY newrelic.yml /tmp/newrelic.yml
+COPY newrelic-extensions/* /tmp/newrelic-extensions/
+
+#Copy build files
+COPY docker-service-alpine.sh /tmp/docker-service.sh
+COPY build-alpine.sh /tmp/build.sh
+RUN chmod a+x /tmp/build.sh
+
+ONBUILD COPY docker/docker-config.yml docker/docker.properties build/libs/*.jar target/*.jar /tmp/
+ONBUILD RUN rm -fv /tmp/*tests*.jar
+
+ONBUILD RUN /tmp/build.sh
+
+# Set this to a valid new relic license key to activate the new relic agent
+ENV NEW_RELIC_LICENSE_KEY ""
+
+
+ENV JAVA_OPTIONS -server \
+-d64 \
+-Djava.net.preferIPv4Stack=true \
+-XX:+UseNUMA \
+-XX:+UseCompressedOops \
+-XX:+UseG1GC \
+-XX:+AggressiveOpts \
+-XX:+UseFastAccessorMethods \
+-XX:+UseBiasedLocking \
+-XX:NewRatio=2 \
+-XX:+HeapDumpOnOutOfMemoryError \
+-XX:HeapDumpPath=/opt/gatekeeper \
+-XX:+PrintGC \
+-XX:+PrintGCDetails \
+-XX:+PrintGCTimeStamps \
+-XX:GCLogFileSize=20M \
+-XX:NumberOfGCLogFiles=15 \
+-XX:+UseGCLogFileRotation \
+-XX:+PrintGCDateStamps \
+-XX:+PrintPromotionFailure \
+-Djava.security.egd=file:/dev/urandom \
+-Dcom.sun.management.jmxremote \
+-Dcom.sun.management.jmxremote.port=9010 \
+-Dcom.sun.management.jmxremote.rmi.port=9010 \
+-Dcom.sun.management.jmxremote.local.only=false \
+-Dcom.sun.management.jmxremote.authenticate=false \
+-Dcom.sun.management.jmxremote.ssl=false \
+-XX:-ReduceInitialCardMarks
+
+ENV JAVA_MEMORY -Xmx500m
+
+# Makes all docker dw apps log json if using: ${VIMOND_DW_CONSOLE_LOG_FORMAT:-console} as config-entry
+ENV VIMOND_DW_CONSOLE_LOG_FORMAT console-logstash
+
+EXPOSE 9010
+
+CMD ["server"]
+
+ENTRYPOINT ["/usr/bin/docker-service.sh"]
