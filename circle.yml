@@ -10,31 +10,13 @@ dependencies:
   override:
     - docker info
     - docker login -u $ARTIFACTORY_USER -p $ARTIFACTORY_PASSWORD -e developers@vimond.com $DOCKER_PRIVATE_REPO
-    - if [[ -e ~/docker/image.tgz ]]; then gunzip -c ~/docker/image.tgz | docker load ; fi
-    - docker build -t $IMAGE_NAME:$CIRCLE_BUILD_NUM .
-
-    - mkdir -p ~/docker; docker save $IMAGE_NAME:$CIRCLE_BUILD_NUM | gzip -c > ~/docker/image.tgz;
-#    - if [[ ! -e ~/docker/image.tgz ]]; then mkdir -p ~/docker; docker save $IMAGE_NAME:$CIRCLE_BUILD_NUM | gzip -c > ~/docker/image.tgz; fi
-
+    - make build
 test:
   override:
-    - docker run  $IMAGE_NAME:$CIRCLE_BUILD_NUM ls
-#    - curl --retry 10 --retry-delay 5 -v http://localhost:80 (or something similar)
+    - make test
 
 deployment:
-#  hub:
-#    branch: master
-#    commands:
-#      - docker login -e developers@vimond.com -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
-#      - docker tag -f $IMAGE_NAME:$CIRCLE_BUILD_NUM vimond/$IMAGE_NAME:latest
-#      - docker tag    $IMAGE_NAME:$CIRCLE_BUILD_NUM vimond/$IMAGE_NAME:$CIRCLE_BUILD_NUM
-#      - docker push vimond/$IMAGE_NAME:$CIRCLE_BUILD_NUM
-#      - docker push vimond/$IMAGE_NAME:latest
   docker:
     branch: master
     commands:
-      - docker login -u $ARTIFACTORY_USER -p $ARTIFACTORY_PASSWORD -e developers@vimond.com $DOCKER_PRIVATE_REPO
-      - docker tag -f $IMAGE_NAME:$CIRCLE_BUILD_NUM $DOCKER_PRIVATE_REPO/$IMAGE_NAME:latest
-      - docker tag    $IMAGE_NAME:$CIRCLE_BUILD_NUM $DOCKER_PRIVATE_REPO/$IMAGE_NAME:$CIRCLE_BUILD_NUM
-      - docker push $DOCKER_PRIVATE_REPO/$IMAGE_NAME:$CIRCLE_BUILD_NUM
-      - docker push $DOCKER_PRIVATE_REPO/$IMAGE_NAME:latest
+      - make release
