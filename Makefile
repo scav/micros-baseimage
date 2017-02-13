@@ -9,11 +9,11 @@ all: build
 
 build:
 	docker build  -t $(NAME):$(VERSION)  .
-	docker build  -t $(NAME):alpine-$(VERSION)   -f Dockerfile.alpine .
+	docker build  -t $(NAME):alpine-$(VERSION)  -f Dockerfile.alpine .
 
 test:
-	docker run --rm $(NAME):$(VERSION) java -version
-	docker run --rm $(NAME):alpine-$(VERSION) java -version
+	docker run --rm --entrypoint java $(NAME):$(VERSION) -version
+	docker run --rm --entrypoint java $(NAME):alpine-$(VERSION) -version
 
 tag_latest:
 	docker tag  $(NAME):$(VERSION) $(NAME):latest

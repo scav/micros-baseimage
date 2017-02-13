@@ -4,7 +4,7 @@
 #This is for keeping the confusion at bay.
 source /tmp/docker.properties
 mkdir /opt
-adduser -s /bin/bash -h /opt/$service_name -D $service_name docker_env
+adduser -s /bin/bash -h /opt/$service_name -u ${user_id:-1000}  -D $service_name docker_env
 mkdir /var/log/${service_name}
 
 #New relic agent installation
