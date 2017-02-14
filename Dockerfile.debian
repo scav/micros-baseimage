@@ -1,8 +1,4 @@
-FROM openjdk:8-jre-alpine
-
-MAINTAINER Matteo Remo Luzzi <matteo@vimond.com>
-
-RUN apk add --no-cache bash
+FROM openjdk:8-jre
 
 #Install new relic agent
 ADD https://download.newrelic.com/newrelic/java-agent/newrelic-agent/3.35.2/newrelic-java.zip /tmp/newrelic-java.zip
@@ -10,8 +6,8 @@ COPY newrelic.yml /tmp/newrelic.yml
 COPY newrelic-extensions/* /tmp/newrelic-extensions/
 
 #Copy build files
-COPY alpine/docker-service-alpine.sh /tmp/docker-service.sh
-COPY alpine/build-alpine.sh /tmp/build.sh
+COPY debian/docker-service-debian.sh /tmp/docker-service.sh
+COPY debian/build-debian.sh /tmp/build.sh
 RUN chmod a+x /tmp/build.sh
 
 ONBUILD COPY docker/docker-config.yml docker/docker.properties build/libs/*.jar target/*.jar /tmp/
