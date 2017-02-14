@@ -44,7 +44,7 @@ The service version is made available from the pom.xml
 
 
 
-###```SERVICE_CONFIG```
+###```SERVICE_CONFIG```d
 Simply points to the /opt/$SERVICE_NAME/config.yml
 
 ###```SERVICE_CMD```
@@ -92,3 +92,10 @@ at runtime.
 
 This is your vanilla configuration file. It can be overridden by the use of volumes and SERVICE_OPTION variables.
 
+## Docker images based on Alpine and Debian
+As migration step towards Kubernetes two new images have been created, based on Alpine and Debian Linux distros. The main reason for these new images is that, with the current micros base image based on [phusion/baseimage-docker](https://github.com/phusion/baseimage-docker), each microservice is run in a supervised mode, which might lead to unexpected results in terms of liveness check. Specifically a container might look healty from outside when the processes running inside is being restarted by the supervisor.
+Container inheriting these base images will run the microservice process without supervision, which mean that if the process crashes (missing config value or unhandled exception for example) the whole container will stop the execution. 
+### Limitation
+* Only the debian based image can be used in a Vimond environment at the moment. Alpine linux does not support ```search``` keyword in ```/etc/resolv.conf``` file (more info [here](https://github.com/gliderlabs/docker-alpine/issues/8)) which makes impossible service communication base on DNS service discovery (```nslookup gatekeeper.ha``` would fail).
+* Due to UNIX signal propagation issue from root to non-root user, only the user named after the service name (see ```SERVICE_NAME``` variable above) is allowed to run the container. This can be obtained by defining the docker directive ```USER $SERVICE_NAME``` in your microservice Dockerfile.
+* The images are missing an init script (more info [here] (https://blog.phusion.nl/2015/01/20/docker-and-the-pid-1-zombie-reaping-problem/)).
