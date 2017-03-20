@@ -1,5 +1,5 @@
 # vim:set ft=dockerfile:
-FROM vimond-docker-dockerv2-local.artifactoryonline.com/vimond-base-java-8
+FROM vimond-dockerv2-local.jfrog.io/vimond-base-java-8
 MAINTAINER Olve Sæther Hansen <olve@vimond.com>
 
 ADD https://download.newrelic.com/newrelic/java-agent/newrelic-agent/3.22.1/newrelic-java.zip /tmp/newrelic-java.zip
